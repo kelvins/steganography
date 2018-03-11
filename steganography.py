@@ -98,6 +98,9 @@ class Steganography(object):
         new_image = Image.new(img.mode, img.size)
         pixels_new = new_image.load()
 
+        # Tuple used to store the image original size
+        original_size = img.size
+
         for i in range(img.size[0]):
             for j in range(img.size[1]):
                 # Get the RGB (as a string tuple) from the current pixel
@@ -111,6 +114,14 @@ class Steganography(object):
 
                 # Convert it to an integer tuple
                 pixels_new[i, j] = Steganography.__bin_to_int(rgb)
+
+                # If this is a 'valid' position, store it
+                # as the last valid position
+                if pixels_new[i, j] != (0, 0, 0):
+                    original_size = (i + 1, j + 1)
+
+        # Crop the image based on the 'valid' pixels
+        new_image = new_image.crop((0, 0, original_size[0], original_size[1]))
 
         return new_image
 

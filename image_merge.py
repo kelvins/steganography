@@ -1,105 +1,144 @@
 
+import time
+import argparse
 from PIL import Image
 
 
 class ImageMerge(object):
 
-    def __init__(self):
-        pass
+    @staticmethod
+    def __int_to_bin(rgb):
+        """
+        Convert an integer tuple to a binary (string) tuple.
+        :param rgb: An integer tuple (e.g. (220, 110, 96))
+        :return: A string tuple (e.g. ("00101010", "11101011", "00010110"))
+        """
+        r, g, b = rgb
+        return ('{0:08b}'.format(r),
+                '{0:08b}'.format(g),
+                '{0:08b}'.format(b))
 
     @staticmethod
-    def int_to_bin(value):
-        return '{0:08b}'.format(int(value))
+    def __bin_to_int(rgb):
+        """
+        Convert a binary (string) tuple to an integer tuple.
+        :param rgb: A string tuple (e.g. ("00101010", "11101011", "00010110"))
+        :return: Return an int tuple (e.g. (220, 110, 96))
+        """
+        r, g, b = rgb
+        return (int(r, 2),
+                int(g, 2),
+                int(b, 2))
 
     @staticmethod
-    def bin_to_int(value):
-        return int(str(value), 2)
+    def __merge_rgb(rgb1, rgb2):
+        """
+        Merge two RGB tuples.
+        :param rgb1: A string tuple (e.g. ("00101010", "11101011", "00010110"))
+        :param rgb2: Another string tuple (e.g. ("00101010", "11101011", "00010110"))
+        :return: An integer tuple with the two RGB values merged.
+        """
+        r1, g1, b1 = rgb1
+        r2, g2, b2 = rgb2
+        rgb = (r1[:4] + r2[:4],
+               g1[:4] + g2[:4],
+               b1[:4] + b2[:4])
+        return rgb
 
     @staticmethod
     def merge(image_path1, image_path2):
+        """
+        Merge two images. The second one will be merged into the first one.
+        :param image_path1: Path to the first input image.
+        :param image_path2: Path to the second input image.
+        :return: A new merged image.
+        """
 
+        # Open the two images
         img1 = Image.open(image_path1)
         img2 = Image.open(image_path2)
 
+        # Get the pixel map of the two images
         pixel_map1 = img1.load()
         pixel_map2 = img2.load()
 
+        # Create a new image that will be outputted
         new_image = Image.new(img1.mode, img1.size)
-        new_image.resize(img1.size, Image.ANTIALIAS)
         pixels_new = new_image.load()
 
         for i in range(img1.size[0]):
             for j in range(img1.size[1]):
-                r1 = ImageMerge.int_to_bin(pixel_map1[i,j][0])
-                g1 = ImageMerge.int_to_bin(pixel_map1[i,j][1])
-                b1 = ImageMerge.int_to_bin(pixel_map1[i,j][2])
+                rgb1 = ImageMerge.__int_to_bin(pixel_map1[i, j])
 
-                r2 = "00000000"
-                g2 = "00000000"
-                b2 = "00000000"
+                # Use a black pixel as default
+                rgb2 = ImageMerge.__int_to_bin((0, 0, 0))
 
+                # Check if the pixel map position is valid for the second image
                 if i < img2.size[0] and j < img2.size[1]:
-                    r2 = ImageMerge.int_to_bin(pixel_map2[i,j][0])
-                    g2 = ImageMerge.int_to_bin(pixel_map2[i,j][1])
-                    b2 = ImageMerge.int_to_bin(pixel_map2[i,j][2])
+                    rgb2 = ImageMerge.__int_to_bin(pixel_map2[i, j])
 
-                r = r1[:4] + r2[:4]
-                g = g1[:4] + g2[:4]
-                b = b1[:4] + b2[:4]
+                # Merge the two pixels and convert it to a integer tuple
+                rgb = ImageMerge.__merge_rgb(rgb1, rgb2)
 
-                r = ImageMerge.bin_to_int(r)
-                g = ImageMerge.bin_to_int(g)
-                b = ImageMerge.bin_to_int(b)
-
-                pixels_new[i,j] = (r,g,b,255)
+                pixels_new[i, j] = ImageMerge.__bin_to_int(rgb)
 
         return new_image
 
     @staticmethod
     def unmerge(image_path):
+        """
+        Unmerge an image.
+        :param image_path: The input image.
+        :return: The unmerged/extracted image.
+        """
 
+        # Open the input image
         img = Image.open(image_path)
 
+        # Load the pixel map
         pixel_map = img.load()
 
+        # Create the new image and load the pixel map
         new_image = Image.new(img.mode, img.size)
         pixels_new = new_image.load()
 
         for i in range(img.size[0]):
             for j in range(img.size[1]):
-                r1 = ImageMerge.int_to_bin(pixel_map[i,j][0])
-                g1 = ImageMerge.int_to_bin(pixel_map[i,j][1])
-                b1 = ImageMerge.int_to_bin(pixel_map[i,j][2])
+                # Get the RGB (as a string tuple) from the current pixel
+                r, g, b = ImageMerge.__int_to_bin(pixel_map[i, j])
 
-                r2 = r1[4:] + "0000"
-                g2 = g1[4:] + "0000"
-                b2 = b1[4:] + "0000"
+                # Extract the last 4 bits (corresponding to the hidden image)
+                # Concatenate 4 zero bits because we are working with 8 bit values
+                rgb = (r[4:] + "0000",
+                       g[4:] + "0000",
+                       b[4:] + "0000")
 
-                r1 = r1[:4] + "0000"
-                g1 = g1[:4] + "0000"
-                b1 = b1[:4] + "0000"
+                # Convert it to an integer tuple
+                pixels_new[i, j] = ImageMerge.__bin_to_int(rgb)
 
-                r1 = ImageMerge.bin_to_int(r1)
-                g1 = ImageMerge.bin_to_int(g1)
-                b1 = ImageMerge.bin_to_int(b1)
-
-                r2 = ImageMerge.bin_to_int(r2)
-                g2 = ImageMerge.bin_to_int(g2)
-                b2 = ImageMerge.bin_to_int(b2)
-
-                pixel_map[i,j] = (r1,g1,b1,255)
-                pixels_new[i,j] = (r2,g2,b2,255)
-
-        return img, new_image
+        return new_image
 
 if __name__ == "__main__":
-    path1 = "res/img2.jpg"
-    path2 = "res/img4.png"
+    # Construct the argument parse and parse the arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--input_image1", type=str, required=True, help="Path to the input image 1")
+    ap.add_argument("--input_image2", type=str, required=False, help="Path to the input image 2")
+    ap.add_argument("--output_image", type=str, required=False, help="Path to the output image")
+    args = vars(ap.parse_args())
 
-    final_image = ImageMerge.merge(path1, path2)
-    final_image.save("result_image.png")
-    final_image.show()
+    # Get the current date time (e.g. 20180215221510)
+    curr_time = time.strftime("%Y%m%d%H%M%S")
 
-    unmerged_image1, unmerged_image2 = ImageMerge.unmerge("result_image.png")
-    unmerged_image1.show()
-    unmerged_image2.show()
+    # If the output image1 path is empty, set a unique name for it
+    if not args["output_image"]:
+        args["output_image"] = "output_image_" + curr_time + ".png"
+
+    # If the input_image2 argument is valid (not empty), the user
+    # is trying to merge two images, so call the merge method
+    if args["input_image2"]:
+        merged_image = ImageMerge.merge(args["input_image1"], args["input_image2"])
+        merged_image.save(args["output_image"])
+    # Else, try to unmerge the image
+    else:
+        unmerged_image = ImageMerge.unmerge(args["input_image1"])
+        unmerged_image.save(args["output_image"])

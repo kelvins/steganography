@@ -46,17 +46,13 @@ class ImageMerge(object):
         return rgb
 
     @staticmethod
-    def merge(image_path1, image_path2):
+    def merge(img1, img2):
         """
         Merge two images. The second one will be merged into the first one.
-        :param image_path1: Path to the first input image.
-        :param image_path2: Path to the second input image.
+        :param img1: First image
+        :param img2: Second image
         :return: A new merged image.
         """
-
-        # Open the two images
-        img1 = Image.open(image_path1)
-        img2 = Image.open(image_path2)
 
         # Get the pixel map of the two images
         pixel_map1 = img1.load()
@@ -85,15 +81,12 @@ class ImageMerge(object):
         return new_image
 
     @staticmethod
-    def unmerge(image_path):
+    def unmerge(img):
         """
         Unmerge an image.
-        :param image_path: The input image.
+        :param img: The input image.
         :return: The unmerged/extracted image.
         """
-
-        # Open the input image
-        img = Image.open(image_path)
 
         # Load the pixel map
         pixel_map = img.load()
@@ -136,9 +129,12 @@ if __name__ == "__main__":
     # If the input_image2 argument is valid (not empty), the user
     # is trying to merge two images, so call the merge method
     if args["input_image2"]:
-        merged_image = ImageMerge.merge(args["input_image1"], args["input_image2"])
+        img1 = Image.open(args["input_image1"])
+        img2 = Image.open(args["input_image2"])
+        merged_image = ImageMerge.merge(img1, img2)
         merged_image.save(args["output_image"])
     # Else, try to unmerge the image
     else:
-        unmerged_image = ImageMerge.unmerge(args["input_image1"])
+        img = Image.open(args["input_image1"])
+        unmerged_image = ImageMerge.unmerge(img)
         unmerged_image.save(args["output_image"])

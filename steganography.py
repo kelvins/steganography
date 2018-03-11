@@ -3,7 +3,7 @@ import argparse
 from PIL import Image
 
 
-class ImageMerge(object):
+class Steganography(object):
 
     @staticmethod
     def __int_to_bin(rgb):
@@ -67,19 +67,19 @@ class ImageMerge(object):
 
         for i in range(img1.size[0]):
             for j in range(img1.size[1]):
-                rgb1 = ImageMerge.__int_to_bin(pixel_map1[i, j])
+                rgb1 = Steganography.__int_to_bin(pixel_map1[i, j])
 
                 # Use a black pixel as default
-                rgb2 = ImageMerge.__int_to_bin((0, 0, 0))
+                rgb2 = Steganography.__int_to_bin((0, 0, 0))
 
                 # Check if the pixel map position is valid for the second image
                 if i < img2.size[0] and j < img2.size[1]:
-                    rgb2 = ImageMerge.__int_to_bin(pixel_map2[i, j])
+                    rgb2 = Steganography.__int_to_bin(pixel_map2[i, j])
 
                 # Merge the two pixels and convert it to a integer tuple
-                rgb = ImageMerge.__merge_rgb(rgb1, rgb2)
+                rgb = Steganography.__merge_rgb(rgb1, rgb2)
 
-                pixels_new[i, j] = ImageMerge.__bin_to_int(rgb)
+                pixels_new[i, j] = Steganography.__bin_to_int(rgb)
 
         return new_image
 
@@ -101,7 +101,7 @@ class ImageMerge(object):
         for i in range(img.size[0]):
             for j in range(img.size[1]):
                 # Get the RGB (as a string tuple) from the current pixel
-                r, g, b = ImageMerge.__int_to_bin(pixel_map[i, j])
+                r, g, b = Steganography.__int_to_bin(pixel_map[i, j])
 
                 # Extract the last 4 bits (corresponding to the hidden image)
                 # Concatenate 4 zero bits because we are working with 8 bit values
@@ -110,7 +110,7 @@ class ImageMerge(object):
                        b[4:] + "0000")
 
                 # Convert it to an integer tuple
-                pixels_new[i, j] = ImageMerge.__bin_to_int(rgb)
+                pixels_new[i, j] = Steganography.__bin_to_int(rgb)
 
         return new_image
 
@@ -128,11 +128,11 @@ if __name__ == "__main__":
         img1 = Image.open(args["input_image1"])
         img2 = Image.open(args["input_image2"])
 
-        merged_image = ImageMerge.merge(img1, img2)
+        merged_image = Steganography.merge(img1, img2)
         merged_image.save(args["output_image"])
     # Else, try to unmerge the image
     else:
         img = Image.open(args["input_image1"])
 
-        unmerged_image = ImageMerge.unmerge(img)
+        unmerged_image = Steganography.unmerge(img)
         unmerged_image.save(args["output_image"])

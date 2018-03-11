@@ -1,5 +1,4 @@
 
-import time
 import argparse
 from PIL import Image
 
@@ -116,25 +115,20 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_image1", type=str, required=True, help="Path to the input image 1")
     ap.add_argument("--input_image2", type=str, required=False, help="Path to the input image 2")
-    ap.add_argument("--output_image", type=str, required=False, help="Path to the output image")
+    ap.add_argument("--output_image", type=str, required=True, help="Path to the output image")
     args = vars(ap.parse_args())
-
-    # Get the current date time (e.g. 20180215221510)
-    curr_time = time.strftime("%Y%m%d%H%M%S")
-
-    # If the output image1 path is empty, set a unique name for it
-    if not args["output_image"]:
-        args["output_image"] = "output_image_" + curr_time + ".png"
 
     # If the input_image2 argument is valid (not empty), the user
     # is trying to merge two images, so call the merge method
     if args["input_image2"]:
         img1 = Image.open(args["input_image1"])
         img2 = Image.open(args["input_image2"])
+
         merged_image = ImageMerge.merge(img1, img2)
         merged_image.save(args["output_image"])
     # Else, try to unmerge the image
     else:
         img = Image.open(args["input_image1"])
+
         unmerged_image = ImageMerge.unmerge(img)
         unmerged_image.save(args["output_image"])

@@ -53,6 +53,10 @@ class ImageMerge(object):
         :return: A new merged image.
         """
 
+        # Check the images dimensions
+        if img2.size[0] > img1.size[0] or img2.size[1] > img1.size[1]:
+            raise ValueError('Image 1 size is lower than image 2 size!')
+
         # Get the pixel map of the two images
         pixel_map1 = img1.load()
         pixel_map2 = img2.load()

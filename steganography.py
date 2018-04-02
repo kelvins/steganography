@@ -127,22 +127,22 @@ class Steganography(object):
         return new_image
 
 
-def main(args):
+def main():
     # Construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_image1", type=str, required=True, help="Path to the input image 1")
     ap.add_argument("--input_image2", type=str, required=False, help="Path to the input image 2")
     ap.add_argument("--output_image", type=str, required=True, help="Path to the output image")
-    vars(ap.parse_args())
+    args = ap.parse_args()
 
     # Extract each argument to a variable just for convenience
-    input_image1 = args["input_image1"]
-    input_image2 = args["input_image2"]
-    output_image = args["output_image"]
+    input_image1 = args.input_image1
+    input_image2 = args.input_image2
+    output_image = args.output_image
 
     # If the input_image2 argument is valid (not empty), the user
     # is trying to merge two images, so call the merge method
-    if args["input_image2"]:
+    if input_image2:
         img1 = Image.open(input_image1)
         img2 = Image.open(input_image2)
 
@@ -156,4 +156,4 @@ def main(args):
         unmerged_image.save(output_image)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()

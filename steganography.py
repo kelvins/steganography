@@ -134,25 +134,20 @@ def main():
     ap.add_argument("--output_image", type=str, required=True, help="Path to the output image")
     args = ap.parse_args()
 
-    # Extract each argument to a variable just for convenience
-    input_image1 = args.input_image1
-    input_image2 = args.input_image2
-    output_image = args.output_image
-
     # If the input_image2 argument is valid (not empty), the user
     # is trying to merge two images, so call the merge method
-    if input_image2:
-        img1 = Image.open(input_image1)
-        img2 = Image.open(input_image2)
+    if args.input_image2:
+        img1 = Image.open(args.input_image1)
+        img2 = Image.open(args.input_image2)
 
         merged_image = Steganography.merge(img1, img2)
-        merged_image.save(output_image)
+        merged_image.save(args.output_image)
     # Else, try to unmerge the image
     else:
-        img = Image.open(input_image1)
+        img = Image.open(args.input_image1)
 
         unmerged_image = Steganography.unmerge(img)
-        unmerged_image.save(output_image)
+        unmerged_image.save(args.output_image)
 
 if __name__ == "__main__":
     main()

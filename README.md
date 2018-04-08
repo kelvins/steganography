@@ -38,7 +38,7 @@ So, each pixel from the image is composed of 3 values (red, green, blue) which a
 
 As we can see in the image above, for each pixel we have three values, which can be represented in [binary code](https://en.wikipedia.org/wiki/Binary_code) (the computer language).
 
-When working with binary codes, we have more significant bits and least significant bits, as you can see in the image below.
+When working with binary codes, we have more significant bits and less significant bits, as you can see in the image below.
 
 ![](https://cdn-images-1.medium.com/max/2000/1*YQGZLBpDn2U9Bu8sZphzXQ.jpeg)
 
@@ -57,3 +57,30 @@ The left upper image is the image that will hide the right upper image. The left
 ![](https://cdn-images-1.medium.com/max/2000/1*4paRMea_BGeNpJ2VzFGCoA.png)
 
 As you can see in the image above, we lost some image quality in the process, but this does not interfere with image comprehension.
+
+## How to use it?
+
+You can call the script from the command line, as follows:
+
+```python
+python steganography.py --input_image1 res/image1.jpg \
+                        --input_image2 res/image2.jpg \
+                        --output_image res/merged_image.png
+
+python steganography.py --input_image1 res/merged_image.png \
+                        --output_image res/unmerged_image.png
+```
+
+To use the **Steganography** class in your **Python** code, you need to use the **Image** module from the **Pillow** library, for example:
+
+```python
+from PIL import Image
+
+img1 = Image.open(input_image1)
+img2 = Image.open(input_image2)
+
+merged_image = Steganography.merge(img1, img2)
+merged_image.save(output_image)
+```
+
+**Note**: the **output image** from the **merge operation** and the **input image** for the **unmerge operation** must be in **PNG** format.

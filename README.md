@@ -38,15 +38,15 @@ So, each pixel from the image is composed of 3 values (red, green, blue) which a
 
 As we can see in the image above, for each pixel we have three values, which can be represented in [binary code](https://en.wikipedia.org/wiki/Binary_code) (the computer language).
 
-When working with binary codes, we have more significant bits and less significant bits, as you can see in the image below.
+When working with binary codes, we have more significant bits and least significant bits, as you can see in the image below.
 
 ![](https://cdn-images-1.medium.com/max/2000/1*YQGZLBpDn2U9Bu8sZphzXQ.jpeg)
 
 The **leftmost** bit is the **most significant bit**. If we change the leftmost bit it will have a large impact on the final value. For example, if we change the leftmost bit from **1** to **0** (**11111111** to **01111111**) it will change the decimal value from **255** to **127**.
 
-On the other hand, the **rightmost** bit is the **less significant bit**. If we change the rightmost bit it will have less impact on the final value. For example, if we change the leftmost bit from **1** to **0** (**11111111** to **11111110**) it will change the decimal value from **255** to **254**. Note that the rightmost bit will change only 1 in a range of 256 (it represents less than 1%).
+On the other hand, the **rightmost** bit is the **least significant bit**. If we change the rightmost bit it will have less impact on the final value. For example, if we change the leftmost bit from **1** to **0** (**11111111** to **11111110**) it will change the decimal value from **255** to **254**. Note that the rightmost bit will change only 1 in a range of 256 (it represents less than 1%).
 
-**Summarizing:** each pixel has three values (RGB), each RGB value is 8-bit (it means we can store 8 binary values) and the rightmost bits are less significant. So, if we change the rightmost bits it will have a small visual impact on the final image. This is the steganography key to hide an image inside another. Change the less significant bits from an image and include the most significant bits from the other image.
+**Summarizing:** each pixel has three values (RGB), each RGB value is 8-bit (it means we can store 8 binary values) and the rightmost bits are least significant. So, if we change the rightmost bits it will have a small visual impact on the final image. This is the steganography key to hide an image inside another. Change the least significant bits from an image and include the most significant bits from the other image.
 
 ![](https://cdn-images-1.medium.com/max/2000/1*kpDa0jt6ftSce4b4DQA2MQ.png)
 

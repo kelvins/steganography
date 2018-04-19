@@ -62,7 +62,7 @@ As you can see in the image above, we lost some image quality in the process, bu
 
 You can call the script from the command line, as follows:
 
-```python
+```
 python steganography.py --input_image1 res/image1.jpg \
                         --input_image2 res/image2.jpg \
                         --output_image res/merged_image.png

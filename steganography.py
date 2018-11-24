@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import argparse
+import click
 from PIL import Image
 
 
@@ -56,7 +58,7 @@ class Steganography(object):
 
         # Check the images dimensions
         if img2.size[0] > img1.size[0] or img2.size[1] > img1.size[1]:
-            raise ValueError('Image 1 size is lower than image 2 size!')
+            raise ValueError('Image 2 should not be larger than Image 1!')
 
         # Get the pixel map of the two images
         pixel_map1 = img1.load()
@@ -127,28 +129,27 @@ class Steganography(object):
         return new_image
 
 
-def main():
-    # Construct the argument parse and parse the arguments
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--input_image1", type=str, required=True, help="Path to the input image 1")
-    ap.add_argument("--input_image2", type=str, required=False, help="Path to the input image 2")
-    ap.add_argument("--output_image", type=str, required=True, help="Path to the output image")
-    args = ap.parse_args()
+@click.group()
+def cli():
+    pass
 
-    # If the input_image2 argument is valid (not empty), the user
-    # is trying to merge two images, so call the merge method
-    if args.input_image2:
-        img1 = Image.open(args.input_image1)
-        img2 = Image.open(args.input_image2)
 
-        merged_image = Steganography.merge(img1, img2)
-        merged_image.save(args.output_image)
-    # Else, try to unmerge the image
-    else:
-        img = Image.open(args.input_image1)
+@cli.command()
+@click.option('--img1', required=True, type=str, help='Image that will hide another image')
+@click.option('--img2', required=True, type=str, help='Image that will be hidden')
+@click.option('--output', required=True, type=str, help='Output image')
+def merge(img1, img2, output):
+    merged_image = Steganography.merge(Image.open(img1), Image.open(img2))
+    merged_image.save(output)
 
-        unmerged_image = Steganography.unmerge(img)
-        unmerged_image.save(args.output_image)
 
-if __name__ == "__main__":
-    main()
+@cli.command()
+@click.option('--img', required=True, type=str, help='Image that will be hidden')
+@click.option('--output', required=True, type=str, help='Output image')
+def unmerge(img, output):
+    unmerged_image = Steganography.unmerge(Image.open(img))
+    unmerged_image.save(output)
+
+
+if __name__ == '__main__':
+    cli()

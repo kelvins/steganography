@@ -7,8 +7,8 @@ class Steganography(object):
 
     @staticmethod
     def __int_to_bin(rgb):
-        """
-        Convert an integer tuple to a binary (string) tuple.
+        """Convert an integer tuple to a binary (string) tuple.
+
         :param rgb: An integer tuple (e.g. (220, 110, 96))
         :return: A string tuple (e.g. ("00101010", "11101011", "00010110"))
         """
@@ -19,8 +19,8 @@ class Steganography(object):
 
     @staticmethod
     def __bin_to_int(rgb):
-        """
-        Convert a binary (string) tuple to an integer tuple.
+        """Convert a binary (string) tuple to an integer tuple.
+
         :param rgb: A string tuple (e.g. ("00101010", "11101011", "00010110"))
         :return: Return an int tuple (e.g. (220, 110, 96))
         """
@@ -31,10 +31,11 @@ class Steganography(object):
 
     @staticmethod
     def __merge_rgb(rgb1, rgb2):
-        """
-        Merge two RGB tuples.
+        """Merge two RGB tuples.
+
         :param rgb1: A string tuple (e.g. ("00101010", "11101011", "00010110"))
-        :param rgb2: Another string tuple (e.g. ("00101010", "11101011", "00010110"))
+        :param rgb2: Another string tuple
+        (e.g. ("00101010", "11101011", "00010110"))
         :return: An integer tuple with the two RGB values merged.
         """
         r1, g1, b1 = rgb1
@@ -46,8 +47,8 @@ class Steganography(object):
 
     @staticmethod
     def merge(img1, img2):
-        """
-        Merge two images. The second one will be merged into the first one.
+        """Merge two images. The second one will be merged into the first one.
+
         :param img1: First image
         :param img2: Second image
         :return: A new merged image.
@@ -85,8 +86,8 @@ class Steganography(object):
 
     @staticmethod
     def unmerge(img):
-        """
-        Unmerge an image.
+        """Unmerge an image.
+
         :param img: The input image.
         :return: The unmerged/extracted image.
         """
@@ -107,10 +108,10 @@ class Steganography(object):
                 r, g, b = Steganography.__int_to_bin(pixel_map[i, j])
 
                 # Extract the last 4 bits (corresponding to the hidden image)
-                # Concatenate 4 zero bits because we are working with 8 bit values
-                rgb = (r[4:] + "0000",
-                       g[4:] + "0000",
-                       b[4:] + "0000")
+                # Concatenate 4 zero bits because we are working with 8 bit
+                rgb = (r[4:] + '0000',
+                       g[4:] + '0000',
+                       b[4:] + '0000')
 
                 # Convert it to an integer tuple
                 pixels_new[i, j] = Steganography.__bin_to_int(rgb)

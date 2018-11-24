@@ -31,7 +31,7 @@ merged_image.save(output)
 
 ## Steganography
 
-First of all, let’s understand what is steganography, digital images, pixels, and color models.
+Let’s understand what is steganography, digital images, pixels, and color models.
 
 ### What is steganography?
 

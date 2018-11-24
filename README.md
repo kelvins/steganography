@@ -1,9 +1,40 @@
 
 # Steganography: Hiding an image inside another
 
+## Usage
+
+Create a `virtualenv` and install the requirements:
+
+```
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Then, merge and unmerge your files with:
+
+```
+python steganography.py merge --img1=res/img1.jpg --img2=res/img2.jpg --output=res/output.png
+python steganography.py unmerge --img=res/output.png --output=res/output2.png
+```
+
+To use the **Steganography** class in your **Python** code, you will need to use the **Image** module from the **Pillow** library, for example:
+
+```python
+from PIL import Image
+
+merged_image = Steganography.merge(Image.open(img1), Image.open(img2))
+merged_image.save(output)
+```
+
+**Note**: the **output image** from the **merge operation** and the **input image** for the **unmerge operation** must be in **PNG** format.
+
+## Steganography
+
 First of all, let’s understand what is steganography, digital images, pixels, and color models.
 
 ### What is steganography?
+
 > [Steganography](https://en.wikipedia.org/wiki/Steganography) is the practice of concealing a file, message, image, or video within another file, message, image, or video.
 
 ### What is the advantage of steganography over cryptography?
@@ -57,30 +88,3 @@ The left upper image is the image that will hide the right upper image. The left
 ![](https://cdn-images-1.medium.com/max/2000/1*4paRMea_BGeNpJ2VzFGCoA.png)
 
 As you can see in the image above, we lost some image quality in the process, but this does not interfere with image comprehension.
-
-## How to use it?
-
-You can call the script from the command line, as follows:
-
-```
-python steganography.py --input_image1 res/image1.jpg \
-                        --input_image2 res/image2.jpg \
-                        --output_image res/merged_image.png
-
-python steganography.py --input_image1 res/merged_image.png \
-                        --output_image res/unmerged_image.png
-```
-
-To use the **Steganography** class in your **Python** code, you need to use the **Image** module from the **Pillow** library, for example:
-
-```python
-from PIL import Image
-
-img1 = Image.open(input_image1)
-img2 = Image.open(input_image2)
-
-merged_image = Steganography.merge(img1, img2)
-merged_image.save(output_image)
-```
-
-**Note**: the **output image** from the **merge operation** and the **input image** for the **unmerge operation** must be in **PNG** format.

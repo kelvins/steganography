@@ -1,2 +1,2 @@
-Pillow==6.2.1
-Click==7.0
+Pillow==7.1.1
+click==7.1.1

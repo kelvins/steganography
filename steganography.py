@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import click
 from PIL import Image
 
 
-class Steganography(object):
+class Steganography:
 
     @staticmethod
     def __int_to_bin(rgb):
@@ -15,9 +14,9 @@ class Steganography(object):
         :return: A string tuple (e.g. ("00101010", "11101011", "00010110"))
         """
         r, g, b = rgb
-        return ('{0:08b}'.format(r),
-                '{0:08b}'.format(g),
-                '{0:08b}'.format(b))
+        return (f'{r:08b}',
+                f'{g:08b}',
+                f'{b:08b}')
 
     @staticmethod
     def __bin_to_int(rgb):

@@ -23,7 +23,7 @@ To use the **Steganography** class in your **Python** code, you will need to use
 ```python
 from PIL import Image
 
-merged_image = Steganography.merge(Image.open(image1), Image.open(image2))
+merged_image = Steganography().merge(Image.open(image1), Image.open(image2))
 merged_image.save(output)
 ```
 

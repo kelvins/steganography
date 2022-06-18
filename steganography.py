@@ -1,6 +1,5 @@
-#!/usr/bin/env python
+import argparse
 
-import click
 from PIL import Image
 
 
@@ -128,27 +127,29 @@ class Steganography:
         return new_image
 
 
-@click.group()
-def cli():
-    pass
+def main():
+    parser = argparse.ArgumentParser(description='Steganography')
+    subparser = parser.add_subparsers(dest='command')
 
+    merge = subparser.add_parser('merge')
+    merge.add_argument('--image1', required=True, help='Image1 path')
+    merge.add_argument('--image2', required=True, help='Image2 path')
+    merge.add_argument('--output', required=True, help='Output path')
 
-@cli.command()
-@click.option('--img1', required=True, type=str, help='Image that will hide another image')
-@click.option('--img2', required=True, type=str, help='Image that will be hidden')
-@click.option('--output', required=True, type=str, help='Output image')
-def merge(img1, img2, output):
-    merged_image = Steganography.merge(Image.open(img1), Image.open(img2))
-    merged_image.save(output)
+    unmerge = subparser.add_parser('unmerge')
+    unmerge.add_argument('--image', required=True, help='Image path')
+    unmerge.add_argument('--output', required=True, help='Output path')
 
+    args = parser.parse_args()
 
-@cli.command()
-@click.option('--img', required=True, type=str, help='Image that will be hidden')
-@click.option('--output', required=True, type=str, help='Output image')
-def unmerge(img, output):
-    unmerged_image = Steganography.unmerge(Image.open(img))
-    unmerged_image.save(output)
+    if args.command == 'merge':
+        image1 = Image.open(args.image1)
+        image2 = Image.open(args.image2)
+        Steganography.merge(image1, image2).save(args.output)
+    elif args.command == 'unmerge':
+        image = Image.open(args.image)
+        Steganography.unmerge(image).save(args.output)
 
 
 if __name__ == '__main__':
-    cli()
+    main()

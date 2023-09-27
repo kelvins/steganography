@@ -115,8 +115,10 @@ def main():
         image2 = Image.open(args.image2)
         Steganography().merge(image1, image2).save(args.output)
     elif args.command == 'unmerge':
-        image = Image.open(args.image)
-        Steganography().unmerge(image).save(args.output)
+        image = Image.open(args.image)    
+        image_format = image.format if image.format else 'JPEG'
+        unmerged_image = Steganography().unmerge(image)
+        unmerged_image.save(args.output, format=image_format)
 
 
 if __name__ == '__main__':

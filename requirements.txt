@@ -1,2 +1,2 @@
-Pillow==12.2.0
+Pillow==12.3.0
 click==8.3.1

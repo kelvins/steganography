@@ -1,0 +1,13 @@
+[project]
+name = "steganography"
+version = "0.1.0"
+description = "Hide one image inside another using steganography"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Pillow==13.0.0",
+    "click==8.5.0",
+]
+
+[tool.uv]
+package = false

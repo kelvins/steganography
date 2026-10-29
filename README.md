@@ -3,19 +3,17 @@
 
 ## Usage
 
-Create a `virtualenv` and install the requirements:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) if you do not already have it, then sync the project dependencies:
 
 ```
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
+uv sync
 ```
 
 Then, merge and unmerge your files with:
 
 ```
-python steganography.py merge --image1=res/image1.jpg --image2=res/image2.jpg --output=res/output.png
-python steganography.py unmerge --image=res/output.png --output=res/output2.png
+uv run python steganography.py merge --image1=res/image1.jpg --image2=res/image2.jpg --output=res/output.png
+uv run python steganography.py unmerge --image=res/output.png --output=res/output2.png
 ```
 
 To use the **Steganography** class in your **Python** code, you will need to use the **Image** module from the **Pillow** library, for example:
